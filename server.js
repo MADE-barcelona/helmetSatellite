@@ -48,7 +48,7 @@ var log = function() {
 
   var message = Array.prototype.slice.call(arguments).join(clrCyan+' , '+clrFgReset);
   
-  console.log(clrRed + new Date().toString().split(" ")[4] + clrViolet + " [" + process.pid + '] ' + clrFgReset + message + clrFgReset) ;
+  console.log(clrBlue + new Date().toString().split(" ")[4] + clrViolet + " [" + process.pid + '] ' + clrFgReset + message + clrFgReset) ;
     
 } ;
 
@@ -81,4 +81,4 @@ connect.createServer(
     
 ).listen(helmetPort) ;
 
-log("listening for hemlet on " + helmetPort ) ;
+log("listening for helmet on " + helmetPort ) ;
