@@ -46,7 +46,7 @@ var log = function() {
   var clrViolet    = "\x1b[35m" ; // Violet
   var clrCyan      = "\x1b[36m" ; // Cyan
 
-  var message = Array.prototype.slice.call(arguments).join(clrRed+','+clrFgReset);
+  var message = Array.prototype.slice.call(arguments).join(clrCyan+' , '+clrFgReset);
   
   console.log(clrRed + new Date().toString().split(" ")[4] + clrViolet + " [" + process.pid + '] ' + clrFgReset + message + clrFgReset) ;
     
@@ -72,7 +72,7 @@ connect.createServer(
         }
                 
         response.writeHead(200, {
-
+            'Content-type': 'text/plain'
         });
         response.write(CURRENT_ANGLE+"\n") ;
         response.end() ;
