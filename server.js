@@ -32,23 +32,24 @@ var helmetPort = 8080 ;
 var LOG_VERBOSE  = true ;
 var SERVE_STATIC = false ;
 
-var log = function(message) {
-
+var log = function() {
+    
   var clrFgReset   = "\x1b[39m" ; // reset
-
+    
   var clrBlack     = "\x1b[30m" ; // Black
   var clrGrey      = "\x1b[90m" ; // Grey
   var clrLightGrey = "\x1b[37m" ; // Light Grey
-
   var clrRed       = "\x1b[31m" ; // Red
   var clrGreen     = "\x1b[32m" ; // Green
   var clrBlue      = "\x1b[34m" ; // Blue
-
   var clrYellow    = "\x1b[33m" ; // Yellow
   var clrViolet    = "\x1b[35m" ; // Violet
   var clrCyan      = "\x1b[36m" ; // Cyan
 
-  console.log(clrGrey + new Date().toString().split(" ")[4] + "[" + process.pid + '] ' + clrLightGrey + message + clrFgReset) ;
+  var message = Array.prototype.slice.call(arguments).join(clrRed+','+clrFgReset);
+  
+  console.log(clrRed + new Date().toString().split(" ")[4] + clrViolet + " [" + process.pid + '] ' + clrFgReset + message + clrFgReset) ;
+    
 } ;
 
 function angleValid(angle) {
@@ -64,14 +65,14 @@ connect.createServer(
         var angle = URL.parse(request.url).pathname.replace(/\D/,'') ; // needs parse
 
         if (angleValid(angle)) { 
-          log([angle,' ',CURRENT_ANGLE].join(' ')) ;
+          log(angle, CURRENT_ANGLE) ;
           CURRENT_ANGLE = angle ; //  set current value
         } else {
-          LOG_VERBOSE && log([angle,' ',CURRENT_ANGLE].join(' ')) ;    
+          LOG_VERBOSE && log(request.socket.remoteAddress , request.url, angle, CURRENT_ANGLE) ;    
         }
                 
         response.writeHead(200, {
-          "Content-Type": "text/plain"
+
         });
         response.write(CURRENT_ANGLE+"\n") ;
         response.end() ;
