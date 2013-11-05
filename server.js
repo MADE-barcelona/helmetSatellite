@@ -52,16 +52,16 @@ var log = function() {
     
 } ;
 
-function angleValid(angle) {
-  return !isNaN(parseFloat(angle)) && isFinite(angle) && (angle >= 0) && (angle <= 180) ;
-} ; 
-
 // launch bridging server
 connect.createServer(
     connect.favicon()
     , connect.logger({ format: "\x1b[31mhelmet:\x1b[39m :remote-addr :method :status :url :response-time" })
     , function(request, response) { 
     
+        function angleValid(angle) {
+          return !isNaN(parseFloat(angle)) && isFinite(angle) && (angle >= 0) && (angle <= 180) ;
+        } ; 
+
         var angle = URL.parse(request.url).pathname.replace(/\D/,'') ; // needs parse
 
         if (angleValid(angle)) { 
