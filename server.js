@@ -21,10 +21,15 @@ IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
 CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 **********************************************************************************/
 
+GLOBAL.CURRENT_ANGLE = 0 ;
+
 var connect    = require("connect") ;
+var URL        = require("url") ;
+
+var helmetPort = 8080 ;
 
 // CONSTANTS
-var LOG_VERBOSE = false ;
+var LOG_VERBOSE  = true ;
 var SERVE_STATIC = false ;
 
 var log = function(message) {
@@ -46,48 +51,32 @@ var log = function(message) {
     console.log(clrGrey + new Date().toString().split(" ")[4] + "[" + process.pid + '] ' + clrLightGrey + message + clrFgReset) ;
 }
 
-        // launch github webhook api listener
-        connect.createServer(
-            connect.favicon()
-          , connect.logger({ format: "\x1b[31mgithub:\x1b[39m :remote-addr :method :status :url :response-time" })
-          , connect.bodyParser()
-          , function(request, response) {
-            
-              var angle = request.url; // needs parse
+function angleValid(angle) {
+  return !isNaN(parseFloat(angle)) && isFinite(angle) && (angle >= 0) && (angle <= 180) ;
+}
 
-              LOG_VERBOSE && log(angle);
-            
-              if (angleNotValid(angle)) {
-                  response.writeHead(404, {
-                      "Content-Type": "text/plain"
-                  });
-                  response.write("404 Not Found\n") ;
-                  response.end() ;
-              } else {
-                // Valid angle recd. need to echo to remote server.
-                var http = require('http');
+// launch bridging server
+connect.createServer(
+    connect.favicon()
+    , connect.logger({ format: "\x1b[31mhelmet:\x1b[39m :remote-addr :method :status :url :response-time" })
+    , function(request, response) { 
+    
+        var angle = URL.parse(request.url).pathname.replace(/\D/,'') ; // needs parse
 
-                //The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
-                var options = {
-                    host: 'www.random.org'
-                ,   path: '/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
-                };
+        if (angleValid(angle)) { 
+            LOG_VERBOSE && log([angle,' ',CURRENT_ANGLE].join(' ')) ;
+            CURRENT_ANGLE = angle ; //  set current value
+        }
+        
+        response.writeHead(200, {
+            "Content-Type": "text/plain"
+        });
+        response.write(CURRENT_ANGLE+"\n") ;
+        response.end() ;
+        
+    }
+    
+).listen(helmetPort) ;
 
-                callback = function(response) {
-                  var str = '';
-                  response.on('data', function (chunk) {
-                    str += chunk;
-                  });
-
-                  response.on('end', function () {
-                    console.log(str); // return response to original req.
-                  });       
-                }
-                http.request(options, callback).end();
-              }
-           }
-        ).listen(helmetPort) ;
-
-        log("listening for hemlet on " + helmetPort ) ;
+log("listening for hemlet on " + helmetPort ) ;
  
-}) ;
