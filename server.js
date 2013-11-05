@@ -68,7 +68,7 @@ connect.createServer(
           log(angle, CURRENT_ANGLE) ;
           CURRENT_ANGLE = angle ; //  set current value
         } else {
-          LOG_VERBOSE && log(request.socket.remoteAddress , request.url, angle, CURRENT_ANGLE) ;    
+          LOG_VERBOSE && log(request.socket.remoteAddress, request.url, angle, CURRENT_ANGLE) ;    
         }
                 
         response.writeHead(200, {
