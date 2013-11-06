@@ -33,7 +33,7 @@ var LOG_ENABLED  = true ;
 var LOG_VERBOSE  = true ;
 var SERVE_STATIC = false ;
 
-var log = function() {
+var log = function log() {
   
   var ink = {
     reset     : "\x1b[39m"
@@ -82,4 +82,4 @@ connect.createServer(
     }
 ).listen(helmetPort) ;
 
-log("listening for helmet on " + helmetPort ) ;
+log("listening for helmet on " + helmetPort) ;
