@@ -29,9 +29,8 @@ var URL        = require("url") ;
 var helmetPort = 8080 ;
 
 // CONSTANTS
-var LOG_ENABLED  = true ;
-var LOG_VERBOSE  = true ;
-var SERVE_STATIC = false ;
+var LOG_ENABLED  = false ;
+var LOG_VERBOSE  = LOG_ENABLED && true ;
 
 var log = function log() {
   
@@ -48,16 +47,22 @@ var log = function log() {
   , grey      : "\x1b[90m"     
   }
 
-  var message = Array.prototype.slice.call(arguments).join(ink.cyan+' , '+ink.reset);
+  var message = Array.prototype.slice.call(arguments).join(ink.cyan + ' , ' + ink.reset) ;
   
   LOG_ENABLED && console.log(ink.blue + new Date().toString().split(" ")[4] + ink.violet + " [" + process.pid + '] ' + ink.reset + message + ink.reset) ;
     
 } ;
 
-// launch bridging server
+// add logging token for current angle.
+connect.logger.token('angle', function(request, response){ 
+  var newangle = URL.parse(request.url).pathname.replace(/\D/,'') ;
+  return "\x1b[33m "+ CURRENT_ANGLE +"\u00B0 \x1b[39m\u25B7\x1b[32m "+ newangle +"\u00B0 \x1b[39m" ;
+})
+
+// listen for requests.
 connect.createServer(
   connect.favicon()
-  , connect.logger({ immediate: true, format: "\x1b[31mhelmet:\x1b[39m :remote-addr :method :status :url :response-time" })
+  , connect.logger({ immediate: true, format: "\x1b[31mhelmet:\x1b[39m :remote-addr :url :angle" })
   , function(request, response) { 
   
       function angleValid(angle) {
