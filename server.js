@@ -60,12 +60,12 @@ var angleIsValid = function angleIsValid(angle) {
 // add logging token for current angle.
 connect.logger.token('angle', function(request, response){ 
   var newangle = URL.parse(request.url).pathname.replace(/\D/,'') ;
-    return "\x1b[33m "+ CURRENT_ANGLE +"\u00B0 \x1b[39m\u25B7" + (angleIsValid(newangle)?"\x1b[32m ":"\x1b[35m ") + (newangle||CURRENT_ANGLE) +"\u00B0 \x1b[39m" ;
+    return "\x1b[33m "+ CURRENT_ANGLE +"\u00B0 \x1b[39m\u25B7" + (angleIsValid(newangle)?"\x1b[32m ":"\x1b[31m ") + (newangle||CURRENT_ANGLE) +"\u00B0 \x1b[39m" ;
 })
 
 var loggingOptions = { 
   immediate: true
-, format: "\x1b[31m:remote-addr:\x1b[39m:angle :url" 
+, format: "\x1b[3m:remote-addr:\x1b[39m:angle :url" 
 } ;
 
 // listen for requests.
