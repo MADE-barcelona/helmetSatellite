@@ -59,10 +59,15 @@ connect.logger.token('angle', function(request, response){
   return "\x1b[33m "+ CURRENT_ANGLE +"\u00B0 \x1b[39m\u25B7\x1b[32m "+ newangle +"\u00B0 \x1b[39m" ;
 })
 
+var loggingOptions = { 
+  immediate: true
+, format: "\x1b[31m:remote-addr:\x1b[39m :url :angle" 
+} ;
+
 // listen for requests.
 connect.createServer(
   connect.favicon()
-  , connect.logger({ immediate: true, format: "\x1b[31mhelmet:\x1b[39m :remote-addr :url :angle" })
+  , connect.logger(loggingOptions)
   , function(request, response) { 
   
       function angleValid(angle) {
