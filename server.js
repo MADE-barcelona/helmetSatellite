@@ -61,7 +61,7 @@ connect.logger.token('angle', function(request, response){
 
 var loggingOptions = { 
   immediate: true
-, format: "\x1b[31m:remote-addr:\x1b[39m :angle :url" 
+, format: "\x1b[31m:remote-addr:\x1b[39m:angle :url" 
 } ;
 
 // listen for requests.
