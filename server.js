@@ -56,7 +56,7 @@ var log = function log() {
 // add logging token for current angle.
 connect.logger.token('angle', function(request, response){ 
   var newangle = URL.parse(request.url).pathname.replace(/\D/,'') ;
-  return "\x1b[33m "+ CURRENT_ANGLE +"\u00B0 \x1b[39m\u25B7\x1b[32m "+ newangle +"\u00B0 \x1b[39m" ;
+  return "\x1b[33m "+ CURRENT_ANGLE +"\u00B0 \x1b[39m\u25B7\x1b[32m "+ (newangle||CURRENT_ANGLE) +"\u00B0 \x1b[39m" ;
 })
 
 var loggingOptions = { 
