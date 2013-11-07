@@ -53,10 +53,14 @@ var log = function log() {
     
 } ;
 
+var angleIsValid = function angleIsValid(angle) {
+  return !isNaN(parseFloat(angle)) && isFinite(angle) && (angle >= 0) && (angle <= 180) ;
+} ; 
+
 // add logging token for current angle.
 connect.logger.token('angle', function(request, response){ 
   var newangle = URL.parse(request.url).pathname.replace(/\D/,'') ;
-  return "\x1b[33m "+ CURRENT_ANGLE +"\u00B0 \x1b[39m\u25B7\x1b[32m "+ (newangle||CURRENT_ANGLE) +"\u00B0 \x1b[39m" ;
+    return "\x1b[33m "+ CURRENT_ANGLE +"\u00B0 \x1b[39m\u25B7" + (angleIsValid(newangle)?"\x1b[32m ":"\x1b[35m ") + (newangle||CURRENT_ANGLE) +"\u00B0 \x1b[39m" ;
 })
 
 var loggingOptions = { 
@@ -70,13 +74,9 @@ connect.createServer(
   , connect.logger(loggingOptions)
   , function(request, response) { 
   
-      function angleValid(angle) {
-        return !isNaN(parseFloat(angle)) && isFinite(angle) && (angle >= 0) && (angle <= 180) ;
-      } ; 
-        
       var angle = URL.parse(request.url).pathname.replace(/\D/,'') ; // needs parse
         
-      if (angleValid(angle)) { 
+      if (angleIsValid(angle)) { 
         log(angle, CURRENT_ANGLE) ;
         CURRENT_ANGLE = angle ; //  set current value
       } else {
